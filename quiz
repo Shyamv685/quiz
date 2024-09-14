@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz.com</title>
+</head>
+
+<styles>
+
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+
+
+body {
+    font-family:"Outfit",    Arial, sans-serif;
+    background-color: #f4f4f4;
+   
+    margin: 0;
+    width:100%;
+   
+}
+.navbar{
+    background-color: #f0810b;
+    text-align: center;
+    color: white;
+    height:100px;
+    min-width: 1024px;
+    font-size:25px;
+    width:100%;
+  margin-top:-39px;
+
+}h1{
+    text-align: center;
+    padding:10px;
+}
+.quiz-container {
+    background: rgb(206, 65, 65);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding-left:30px;
+    padding-right:30px;
+    text-align: center;
+    align-items: center;
+    margin-top:100px;
+    width:600px;
+    height:200px;
+    margin-left:450px;
+}
+
+.btn {
+    background-color: #28a745;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+.hidden {
+    display: none;
+}
+
+#answer-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-answer {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-answer:hover {
+    background-color:rgb(72, 72, 228);
+} .btn-answer:focus{
+    background-color:#03a04a;
+}
+
+
+footer {
+    background-color:#f0810b;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin-top:190px;
+    width: 100%;
+    bottom: 0;
+  
+}
+@media only screen and (max-width:600px) {
+    body {
+       font-size:20px;
+       position: fixed;
+       justify-content: center;
+       align-items: center;
+       display: flex;
+    }h1{
+        font-size:20px;
+        margin-top:50px;
+        padding-top:100px;
+        text-align: center;
+        padding:10px;
+    }.navbar{
+        width:200px;
+        margin-top:-60px;
+    }.quiz-container {
+        width:250px;
+        font-size:16px;
+        margin-left:350px; 
+    height:380px;
+    padding: 10px;
+ }footer {
+  
+    margin-top:80px;
+    width: 100%;
+    font-size:16px;
+    text-align: center;
+    bottom: 0;
+  }
+
+/* Tablets */
+@media  (min-width:768px) {
+    body {
+        font-size: 18px; 
+    }
+   
+}
+
+/* Desktops */
+@media (min-width: 1024px) {
+    body {
+        font-size: 20px;
+    }
+}
+
+
+</styles>
+
+
+
+
+
+<body>
+    <div class="container">
+    <div class="navbar">
+<h1>COMPUTER QUIZ</h1>
+<p>play & score</p></div>
+
+    <div class="quiz-container">
+        <h1>Quiz</h1>
+        <div id="quiz">
+            <div id="question-container">
+                <!-- Question will be inserted here -->
+            </div>
+            <div id="answer-buttons">
+                <!-- Answer buttons will be inserted here -->
+            </div>
+            <button id="next-button" class="btn" onclick="nextQuestion()">Next</button>
+        </div>
+        <div id="result" class="hidden">
+            <h2 id="score"></h2>
+            <button class="btn" onclick="restartQuiz()">Restart Quiz</button>
+        </div>
+    </div>
+
+
+    
+    <footer>
+        <nav>
+            </nav>
+            <p>&copy; 2024 @computerQuiz</p>
+        </footer>
+    </div>
+</body>
+<script>
+const questions = [
+    {
+        question: "1. What is the capital of France?",
+        answers: [
+            { text: "Berlin", correct: false },
+            { text: "Madrid", correct: false },
+            { text: "Paris", correct: true },
+            { text: "Rome", correct: false }
+        ]
+    },
+    {
+        question: "2. What is 2 + 2?",
+        answers: [
+            { text: "3", correct: false },
+            { text: "4", correct: true },
+            { text: "5", correct: false },
+            { text: "6", correct: false }
+        ]
+    },
+    {
+        question: "3. What is 3 + 3?",
+        answers: [
+            { text: "3", correct: false },
+            { text: "4", correct: false },
+            { text: "5", correct: false },
+            { text: "6", correct: true }
+        ]
+    },
+
+    {
+        question: "4. What is 3 + 3?",
+        answers: [
+            { text: "3", correct: false },
+            { text: "4", correct: false },
+            { text: "5", correct: false },
+            { text: "6", correct: true }
+        ]
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // Add more questions as needed
+];
+
+let currentQuestionIndex = 0;
+let score = 0;
+
+function startQuiz() {
+    currentQuestionIndex = 0;
+    score = 0;
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('quiz').classList.remove('hidden');
+    nextQuestion();
+}
+
+function showQuestion(question) {
+    const questionContainer = document.getElementById('question-container');
+    questionContainer.innerText = question.question;
+    const answerButtons = document.getElementById('answer-buttons');
+    answerButtons.innerHTML = '';
+    question.answers.forEach(answer => {
+        const button = document.createElement('button');
+        button.innerText = answer.text;
+        button.classList.add('btn-answer');
+        button.addEventListener('click', () => selectAnswer(answer));
+        answerButtons.appendChild(button);
+    });
+}
+
+function selectAnswer(answer) {
+    const isCorrect = answer.correct;
+    if (isCorrect) {
+        score++;
+    }
+    const nextButton = document.getElementById('next-button');
+    nextButton.classList.remove('hidden');
+}
+
+function nextQuestion() {
+    const question = questions[currentQuestionIndex];
+    if (question) {
+        showQuestion(question);
+        currentQuestionIndex++;
+    } else {
+        showResult();
+    }
+}
+
+function showResult() {
+    document.getElementById('quiz').classList.add('hidden');
+    const resultContainer = document.getElementById('result');
+    document.getElementById('score').innerText = `You scored ${score} out of ${questions.length}`;
+    resultContainer.classList.remove('hidden');
+}
+
+function restartQuiz() {
+    startQuiz();
+}
+
+// Initialize quiz
+startQuiz();
+
+
+</script>
+</html>
